@@ -121,7 +121,7 @@ provider status.
   `BrainGraphView`/`AudienceConsistencyLazy`; contract in
   `tests/code-splitting.test.ts`). Use `next/image` for any future raster
   images — every current visual is SVG/canvas, so nothing needed a retrofit.
-- Future: migrate hosting to Alex's Mac mini (M4 Pro 24GB); Supabase stays managed.
+- Future: migrate hosting to a dedicated host; Supabase stays managed.
 
 ## Multi-agent etiquette
 

@@ -6,7 +6,7 @@
  */
 
 export type BankSummary = {
-  account: string; // last-4, e.g. '4219'
+  account: string; // last-4, e.g. '7001'
   business: string; // 'General Operations' | 'Vantage'
   month: string; // 'YYYY-MM' (from Statement Date)
   creditsCents: number; // income / deposits this period
