@@ -12,7 +12,17 @@ import { lifeAreaForDepartment } from '@/lib/life-map';
  * icons live in the component, colors are carried on the nodes that have a
  * brand one.
  */
-export type KGNodeKind = 'self' | 'team' | 'task' | 'employee' | 'person' | 'tool';
+export type KGNodeKind = 'self' | 'team' | 'head' | 'task' | 'employee' | 'person' | 'tool';
+
+/** Executive title per department — the head agent each pillar wears. */
+export const DEPT_EXEC_TITLES: Record<string, string> = {
+  'dept-sales': 'CRO',
+  'dept-marketing-growth': 'CMO',
+  'dept-tech': 'CTO',
+  'dept-finance': 'CFO',
+  'dept-comms': 'CCO',
+  'dept-clients': 'COO',
+};
 
 export type KGNode = {
   id: string;
@@ -32,7 +42,7 @@ export type KGEdge = {
 
 export type KnowledgeGraph = { nodes: KGNode[]; edges: KGEdge[] };
 
-const RING: Record<KGNodeKind, number> = { self: 0, team: 1, task: 2, employee: 3, person: 3, tool: 4 };
+const RING: Record<KGNodeKind, number> = { self: 0, team: 1, head: 2, task: 2, employee: 3, person: 3, tool: 4 };
 
 export const SELF_ID = 'self';
 
@@ -159,6 +169,16 @@ export function buildKnowledgeGraph(
     const color = lifeAreaForDepartment(d.id)?.color;
     nodes.push({ id: `team:${d.id}`, kind: 'team', label: d.name, ring: RING.team, color });
     edges.push({ source: SELF_ID, target: `team:${d.id}`, kind: 'pillar' });
+    // The department-head agent — CRO/CMO/CTO/… — wears the pillar's color and
+    // hangs directly off it (2026-08-05).
+    nodes.push({
+      id: `head:${d.id}`,
+      kind: 'head',
+      label: DEPT_EXEC_TITLES[d.id] ?? 'Lead',
+      ring: RING.head,
+      color,
+    });
+    edges.push({ source: `team:${d.id}`, target: `head:${d.id}`, kind: 'member' });
   }
 
   // SOP tasks (ring 2) — the written-out jobs. Each hangs off its department

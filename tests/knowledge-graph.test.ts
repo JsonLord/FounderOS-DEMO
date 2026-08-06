@@ -131,15 +131,16 @@ describe('buildKnowledgeGraph — dept → task → worker → tools chain', () 
 
   test('workers have no direct member edge to their team — the task carries the chain', () => {
     const { edges } = build();
-    expect(edges.filter((e) => e.kind === 'member')).toHaveLength(0);
+    // head:* member edges are the department heads, not workers — exclude them
+    const workerMembers = edges.filter((e) => e.kind === 'member' && !e.target.startsWith('head:'));
+    expect(workerMembers).toHaveLength(0);
   });
 
   test('an unassigned worker falls back to a member edge so nothing orphans', () => {
     const extra = [...agents, agent({ id: 'stray', departmentId: 'dept-tech' })];
     const { edges } = buildKnowledgeGraph(extra, departments, people, tasks);
-    expect(edges.filter((e) => e.kind === 'member')).toEqual([
-      { source: 'emp:stray', target: 'team:dept-tech', kind: 'member' },
-    ]);
+    const workerMembers = edges.filter((e) => e.kind === 'member' && !e.target.startsWith('head:'));
+    expect(workerMembers).toEqual([{ source: 'emp:stray', target: 'team:dept-tech', kind: 'member' }]);
   });
 
   test('uses edges run worker→tool for agents AND humans', () => {
@@ -263,5 +264,43 @@ describe('graph department order (AC1)', () => {
 
   test('unknown departments rank after the known ones', () => {
     expect(graphDeptRank('dept-mystery')).toBeGreaterThan(graphDeptRank('dept-comms'));
+  });
+});
+
+/**
+ * Department-head agents (2026-08-05): every active department gets
+ * an executive node — CRO/CMO/CTO/CFO/CCO/COO — wearing the department's
+ * life-area color, hung directly off its pillar. Legend + graph render them
+ * via the 'head' kind.
+ */
+describe('department heads', () => {
+  test('every used department grows a head node with the exec title + dept color', async () => {
+    const { DEPT_EXEC_TITLES } = await import('@/lib/knowledge-graph');
+    const g = buildKnowledgeGraph(
+      [agent({ id: 'a1', departmentId: 'dept-sales' }), agent({ id: 'a2', departmentId: 'dept-tech' })],
+      [dept('dept-sales', 'Sales'), dept('dept-tech', 'TECH'), dept('dept-clients', 'Clients')],
+    );
+    const heads = g.nodes.filter((n) => n.kind === 'head');
+    expect(heads.map((h) => h.id).sort()).toEqual(['head:dept-sales', 'head:dept-tech']);
+    const sales = heads.find((h) => h.id === 'head:dept-sales')!;
+    expect(sales.label).toBe(DEPT_EXEC_TITLES['dept-sales']);
+    expect(sales.label).toBe('CRO');
+    expect(sales.color).toBeTruthy(); // wears the department tint
+    // hangs off its pillar
+    expect(g.edges).toContainEqual({ source: 'team:dept-sales', target: 'head:dept-sales', kind: 'member' });
+    // unused departments get no head (Clients had no workers)
+    expect(g.nodes.find((n) => n.id === 'head:dept-clients')).toBeUndefined();
+  });
+
+  test('title map covers all six departments', async () => {
+    const { DEPT_EXEC_TITLES } = await import('@/lib/knowledge-graph');
+    expect(DEPT_EXEC_TITLES).toMatchObject({
+      'dept-sales': 'CRO',
+      'dept-marketing-growth': 'CMO',
+      'dept-tech': 'CTO',
+      'dept-finance': 'CFO',
+      'dept-comms': 'CCO',
+      'dept-clients': 'COO',
+    });
   });
 });

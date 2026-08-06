@@ -17,8 +17,12 @@ export type CatalogSkill = {
   path: string; // ~-relative path to the SKILL.md, for the reader header
 };
 
-const SKILLS_DIR = path.join(os.homedir(), '.claude', 'skills');
 const SLUG_RE = /^[a-zA-Z0-9._-]+$/;
+
+/** Resolved per call so tests (and deploys) can point FOUNDER_OS_SKILLS_DIR elsewhere. */
+function skillsDir(): string {
+  return process.env.FOUNDER_OS_SKILLS_DIR || path.join(os.homedir(), '.claude', 'skills');
+}
 
 /** Read one frontmatter field, handling inline, quoted, and block scalars (| / >). */
 function readField(frontmatter: string, key: string): string | undefined {
@@ -71,7 +75,7 @@ export function skillGroup(name: string): string {
 }
 
 /** List the real skills on disk (metadata only). Empty when the dir is absent. */
-export function readUserSkills(dir: string = SKILLS_DIR): CatalogSkill[] {
+export function readUserSkills(dir: string = skillsDir()): CatalogSkill[] {
   let entries: fs.Dirent[];
   try {
     entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -104,7 +108,7 @@ export function readUserSkills(dir: string = SKILLS_DIR): CatalogSkill[] {
 }
 
 /** Read one skill's full SKILL.md. Null on a bad slug or missing file (honest). */
-export function readSkillMarkdown(slug: string, dir: string = SKILLS_DIR): string | null {
+export function readSkillMarkdown(slug: string, dir: string = skillsDir()): string | null {
   if (!SLUG_RE.test(slug)) return null; // no path traversal
   try {
     return fs.readFileSync(path.join(dir, slug, 'SKILL.md'), 'utf8');

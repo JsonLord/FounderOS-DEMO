@@ -47,6 +47,7 @@ export type NeuralLayout = {
 };
 
 const LAYER_OF_KIND: Record<KGNodeKind, number | null> = {
+  head: 3, // dept heads ride the pillar layer in the strand view
   tool: 0,
   employee: 1,
   person: 1,

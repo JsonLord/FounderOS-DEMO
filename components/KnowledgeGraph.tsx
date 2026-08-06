@@ -11,7 +11,7 @@ import {
   forceY,
   type Simulation,
 } from 'd3-force';
-import { ArrowLeft, ChevronLeft, ChevronRight, ClipboardList, Maximize2, Sparkles, User, UserRound, Users, Wrench, X, type LucideIcon } from 'lucide-react';
+import { Crown, ArrowLeft, ChevronLeft, ChevronRight, ClipboardList, Maximize2, Sparkles, User, UserRound, Users, Wrench, X, type LucideIcon } from 'lucide-react';
 import { graphDirectory, orderGraphDepartments, SELF_ID, toolSlugOf, workerNodeId, type DirectoryGroup, type KGNode, type KGNodeKind, type KnowledgeGraph as KGData } from '@/lib/knowledge-graph';
 import { ACTION_LENSES, ENTITY_LENSES, FUNCTION_LENSES, lensNodeSet, type Lens } from '@/lib/graph-lens';
 import { GraphDirectory } from '@/components/GraphDirectory';
@@ -48,6 +48,7 @@ const RIM_DELTA_DEG = (WHEEL_GEOM.delta * 180) / Math.PI;
 const CAT: Record<KGNodeKind, { color: string; Icon: LucideIcon; label: string; r: number }> = {
   self: { color: 'var(--text)', Icon: Sparkles, label: 'Notes', r: 18 },
   team: { color: 'var(--brain-1)', Icon: Users, label: 'Pillars', r: 15 },
+  head: { color: 'var(--brain-2)', Icon: Crown, label: 'Dept heads', r: 12 },
   task: { color: 'var(--muted)', Icon: ClipboardList, label: 'SOP tasks', r: 7 },
   person: { color: 'var(--warn)', Icon: UserRound, label: 'Humans', r: 10 },
   employee: { color: 'var(--accent)', Icon: User, label: 'AI agents', r: 10 },
@@ -58,6 +59,7 @@ const CAT: Record<KGNodeKind, { color: string; Icon: LucideIcon; label: string; 
 // — the old tier dimming made tools/tasks look dark from the top view).
 const TIER_OPACITY: Record<KGNodeKind, number> = {
   self: 1,
+  head: 1,
   team: 1,
   person: 0.98,
   employee: 0.98,
@@ -306,6 +308,7 @@ export function KnowledgeGraph({
     const n = byId.get(id);
     if (!n) return null;
     if (n.kind === 'team') return n.id;
+    if (n.kind === 'head') return n.id.replace('head:', 'team:');
     if (n.kind === 'task') return teamOfTask.get(n.id) ?? null;
     if (isWorker(n.kind)) return teamOfWorker.get(n.id) ?? null;
     if (n.kind === 'tool') {
@@ -335,6 +338,9 @@ export function KnowledgeGraph({
       set.add(SELF_ID);
       for (const w of workersOfTeam.get(id) ?? []) chainOfWorker(w, set);
       for (const t of tasksOfTeam.get(id) ?? []) set.add(t);
+    } else if (node.kind === 'head') {
+      set.add(SELF_ID);
+      set.add(id.replace('head:', 'team:'));
     } else if (node.kind === 'task') {
       set.add(SELF_ID);
       const team = teamOfTask.get(id);
@@ -1431,6 +1437,7 @@ export function KnowledgeGraph({
       {(
         [
           { label: 'Notes', color: HUB_COLOR, Icon: CAT.self.Icon },
+          { label: 'Dept head', color: CAT.head.color, Icon: CAT.head.Icon },
           { label: 'Human', color: CAT.person.color, Icon: CAT.person.Icon },
           { label: 'AI agent', color: CAT.employee.color, Icon: CAT.employee.Icon },
           { label: 'Tool', color: CAT.tool.color, Icon: CAT.tool.Icon },
