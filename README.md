@@ -219,7 +219,7 @@ parties cannot present your token. They carry their own secrets, so set
 ## Deploying with Docker
 
 This fork ships a **production-ready, multi-stage Dockerfile**. The final image
-runs as a non-root user, contains only the standalone Next.js server bundle (no
+runs as a non-root user, ships production dependencies only (no
 devDependencies), and never bakes secrets into image layers.
 
 ### Build
@@ -240,7 +240,8 @@ docker run --env-file .env -p 4100:4100 -v founder-os-data:/app/data founder-os
 | `-p 4100:4100` | Expose the app on port 4100 |
 | `-v founder-os-data:/app/data` | Persist the SQLite database across container restarts |
 
-The entrypoint runs the idempotent database seed automatically on first boot.
+The database seeds itself on first touch, so the first request populates a
+fresh volume automatically.
 
 ### Environment variables
 

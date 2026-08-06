@@ -66,7 +66,9 @@ ENV PORT=4100
 USER nextjs
 EXPOSE 4100
 
+# 127.0.0.1, not localhost: Alpine resolves localhost to ::1 and Next binds IPv4
+# only, so a localhost probe is refused and the container never reads healthy.
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:4100/ || exit 1
+  CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:4100/ || exit 1
 
 CMD ["./node_modules/.bin/next", "start", "-H", "0.0.0.0", "-p", "4100"]
