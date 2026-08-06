@@ -22,7 +22,7 @@ import type { AgentRunResult, RuntimeAgent } from '@/lib/agents/runtime';
  * no seeded numbers. Agents whose connector lacks credentials fail honestly
  * with setup instructions instead of pretending.
  *
- * Top-level agents are instance slots: when the Mac mini is live each one
+ * Top-level agents are instance slots: when the dedicated host is live each one
  * becomes its own OpenClaw Hermes / Claude Code process and respond() routes
  * to that instance instead of the builtin implementation.
  */
@@ -122,7 +122,7 @@ export const realAgents: RuntimeAgent[] = [
       const stack = await localStackStatus();
       return {
         ok: stack.state === 'connected',
-        summary: `Instance hosts on this machine: ${stack.detail} · all agents bound to builtin runtime until the Mac mini lands`,
+        summary: `Instance hosts on this machine: ${stack.detail} · all agents bound to builtin runtime until the dedicated host lands`,
         data: stack.meta,
       };
     },

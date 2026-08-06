@@ -50,7 +50,7 @@ const departments: Department[] = [
 // lib/agents/real.ts (enforced by tests/seed.test.ts). No larp agents.
 //
 // Shape: top-level agents (parentId null) are INSTANCE slots — each one is
-// what becomes its own OpenClaw Hermes / Claude Code process on the Mac mini
+// what becomes its own OpenClaw Hermes / Claude Code process on the dedicated host
 // (`instance` records that binding; everything is 'builtin' until then).
 // Worker rows underneath them do one specific task each and sit at the
 // bottom of the hierarchy.
@@ -971,7 +971,7 @@ const roadmap: RoadmapItem[] = [
   { id: 'rm-supabase', title: 'Revive Supabase Second Brain', quarter: '2026-Q2', status: 'now', departmentId: 'dept-tech', description: 'Unpause free-tier project so gbrain hybrid queries resolve again.' },
   { id: 'rm-scheduler', title: 'Agent scheduler (cron runs)', quarter: '2026-Q3', status: 'next', departmentId: 'dept-tech', description: 'Recurring agent runs with run history and failure alerts.' },
   { id: 'rm-llm', title: 'LLM summarization layer', quarter: '2026-Q3', status: 'next', departmentId: 'dept-tech', description: 'Claude API digests over inbox/Slack/payments data.' },
-  { id: 'rm-macmini', title: 'Migrate to Mac mini (M4 Pro 24GB)', quarter: '2026-Q3', status: 'next', departmentId: 'dept-tech', description: 'Host app + gbrain + agents on the mini; Supabase stays managed.' },
+  { id: 'rm-macmini', title: 'Migrate to a dedicated host', quarter: '2026-Q3', status: 'next', departmentId: 'dept-tech', description: 'Host app + gbrain + agents on the dedicated host; Supabase stays managed.' },
   { id: 'rm-ui', title: 'UI design pass', quarter: '2026-Q4', status: 'later', departmentId: 'dept-tech', description: 'Alex-led redesign once all integrations are live.' },
   { id: 'rm-auth', title: 'Auth + remote access', quarter: '2026-Q4', status: 'later', departmentId: 'dept-tech', description: 'Reach FOUNDER OS on the mini from anywhere, safely.' },
 ];
@@ -991,7 +991,7 @@ const domains: Domain[] = [
   { id: 'brm-4', number: 4, title: 'Payments & Revenue', color: GRAY.mid, items: ['Stripe balance + charges', 'PayPal / Square / Whop registry', 'Reconciliation (planned)'] },
   { id: 'brm-5', number: 5, title: 'Knowledge & Docs', color: GRAY.mid, items: ['Notion workspace', 'ZeroEntropy embeddings', 'Supabase Second Brain'] },
   { id: 'brm-6', number: 6, title: 'Agent Runtime', color: GRAY.dim, items: ['Registry + run()', 'Persisted run log', 'Honest failure states'] },
-  { id: 'brm-7', number: 7, title: 'Infrastructure', color: GRAY.dim, items: ['MacBook (now)', 'Mac mini M4 Pro 24GB (next)', 'SQLite local', 'Supabase managed'] },
+  { id: 'brm-7', number: 7, title: 'Infrastructure', color: GRAY.dim, items: ['Laptop (now)', 'Dedicated host (next)', 'SQLite local', 'Supabase managed'] },
   { id: 'brm-8', number: 8, title: 'Security', color: GRAY.dark, items: ['.env.local secrets (gitignored)', 'Read-only connector scopes', 'No keys in repo'] },
 ];
 

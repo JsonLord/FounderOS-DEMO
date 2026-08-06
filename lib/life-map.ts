@@ -138,7 +138,7 @@ export const LIFE_AREAS: LifeArea[] = [
     modules: [
       { id: 'agents', label: 'Agents', detail: 'The roster and its hierarchy.' },
       { id: 'automations', label: 'Automations', detail: 'Scheduled and self-healing jobs.' },
-      { id: 'infra', label: 'Infra', detail: 'Local stack, ports, Mac mini target.' },
+      { id: 'infra', label: 'Infra', detail: 'Local stack, ports, dedicated host target.' },
       { id: 'hiring', label: 'Hiring', detail: 'Candidates and roles.' },
     ],
     // dept-tech rolls up to knowledge first (lifeAreaForDepartment takes the
