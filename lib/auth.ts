@@ -86,8 +86,9 @@ export function decideAccess({ token, presented, isProduction }: AuthInput): Aut
  * - The ManyChat webhook is machine-to-machine: ManyChat cannot present the
  *   operator's token, and that route already authenticates itself with
  *   MANYCHAT_WEBHOOK_SECRET.
+ * - `/health` and `/api-docs` are public endpoints for space monitoring & API docs.
  */
-const PUBLIC_PATHS = ['/unlock', '/api/unlock', '/api/webhooks'];
+const PUBLIC_PATHS = ['/unlock', '/api/unlock', '/api/webhooks', '/health', '/api-docs'];
 
 export function isPublicPath(pathname: string): boolean {
   // Exact match, or a full segment beneath it. A bare `startsWith` would also
