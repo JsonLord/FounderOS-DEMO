@@ -62,7 +62,6 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV HOSTNAME=0.0.0.0
 ENV PORT=7860
-ENV FOUNDER_OS_ACCESS_TOKEN=founder_os_demo_access_token_hf_space
 
 USER nextjs
 EXPOSE 7860
@@ -70,4 +69,4 @@ EXPOSE 7860
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:7860/health || exit 1
 
-CMD ["./node_modules/.bin/next", "start", "-H", "0.0.0.0", "-p", "7860"]
+CMD ["sh", "-c", "export FOUNDER_OS_ACCESS_TOKEN=\"${FOUNDER_OS_ACCESS_TOKEN:-${HF_TOKEN:-${SECRET_TOKEN:-founder_os_demo_access_token_hf_space}}}\" && exec ./node_modules/.bin/next start -H 0.0.0.0 -p 7860"]

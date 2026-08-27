@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 export default function ApiDocsPage() {
   const endpoints = [
     { method: 'GET', path: '/health', purpose: 'Health check endpoint for space monitoring and readiness probes.', request: 'None', response: '{"status": "ok"}' },
