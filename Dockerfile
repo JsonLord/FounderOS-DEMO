@@ -32,7 +32,7 @@ RUN mkdir -p public && npm run build
 FROM node:20-alpine AS runner
 
 # better-sqlite3 needs libstdc++ at runtime
-RUN apk add --no-cache libstdc++
+RUN apk add --no-cache libstdc++ wget
 
 WORKDIR /app
 
@@ -50,10 +50,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder --chown=nextjs:nodejs /app/package.json ./
 COPY --from=builder --chown=nextjs:nodejs /app/next.config.mjs ./
 
-# Public assets (empty dir is fine -- project uses app/icon.svg instead)
+# Public assets
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
-# Data directory for SQLite -- mount a named volume here
+# Data directory for SQLite
 RUN mkdir -p /app/data && chown nextjs:nodejs /app/data
 VOLUME /app/data
 
@@ -61,14 +61,12 @@ VOLUME /app/data
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV HOSTNAME=0.0.0.0
-ENV PORT=4100
+ENV PORT=7860
 
 USER nextjs
-EXPOSE 4100
+EXPOSE 7860
 
-# 127.0.0.1, not localhost: Alpine resolves localhost to ::1 and Next binds IPv4
-# only, so a localhost probe is refused and the container never reads healthy.
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:4100/ || exit 1
+  CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:7860/health || exit 1
 
-CMD ["./node_modules/.bin/next", "start", "-H", "0.0.0.0", "-p", "4100"]
+CMD ["./node_modules/.bin/next", "start", "-H", "0.0.0.0", "-p", "7860"]

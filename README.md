@@ -1,3 +1,12 @@
+---
+title: Founder OS
+emoji: 🚀
+colorFrom: gray
+colorTo: green
+sdk: docker
+app_port: 7860
+---
+
 # Founder OS
 
 **A personal operating system for single-operator business: a live web command
@@ -231,33 +240,17 @@ docker build -t founder-os .
 ### Run
 
 ```bash
-docker run --env-file .env -p 4100:4100 -v founder-os-data:/app/data founder-os
+docker run --env-file .env -p 7860:7860 -v founder-os-data:/app/data founder-os
 ```
 
 | Flag | Why |
 | --- | --- |
 | `--env-file .env` | Injects all credentials at runtime (never baked into the image) |
-| `-p 4100:4100` | Expose the app on port 4100 |
+| `-p 7860:7860` | Expose the app on port 7860 |
 | `-v founder-os-data:/app/data` | Persist the SQLite database across container restarts |
 
 The database seeds itself on first touch, so the first request populates a
 fresh volume automatically.
-
-### Environment variables
-
-Copy `.env.example` to `.env` and fill in only what you need. The app will
-start without any keys and report honest "not configured" status for each
-missing connector. See **Configuration** below for the full list.
-
-> **Important:** Never bake `.env` into the image. The `.dockerignore` excludes
-> it from the build context, and credentials should always be passed at runtime
-> via `--env-file` or your orchestrator's secret management.
-
-### Health check
-
-The image includes a built-in `HEALTHCHECK` that probes `http://localhost:4100/`
-every 30 seconds. Orchestrators (Docker Swarm, ECS, Kubernetes) will
-automatically use it for readiness checks.
 
 ---
 
