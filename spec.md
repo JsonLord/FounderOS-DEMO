@@ -1,6 +1,6 @@
 # SPEC — FounderOS → Paperclip Native Company Package
 
-Status: **draft** · Owner: FounderOS · Target format: `agentcompanies/v1`
+Status: **P1 + P2 implemented** · Owner: FounderOS · Target format: `agentcompanies/v1`
 (Paperclip [Agent Companies Specification](https://github.com/jsonlord/paperclip/blob/master/docs/companies/companies-spec.md))
 
 ## 0. What this is
@@ -308,20 +308,28 @@ a topologically ordered agent list to make this trivial.
 
 ## 8. New code in FounderOS
 
-All additive, all through the repo layer.
+All additive, all through the repo layer. **Shipped:**
 
 - `lib/company-package.ts` — pure builder. Input: `FounderDb` repos. Output: an
   in-memory package model (`{ files: PackageFile[] }`) plus the `id → slug` map.
-  No fs, no DB, no fetch — unit-testable in `:memory:`.
-- `lib/schemas.ts` — add Zod schemas for the emitted frontmatter shapes
-  (`CompanyDoc`, `TeamDoc`, `AgentDoc`, `TaskDoc`, `PaperclipSidecar`). Validate
-  every emitted doc before it leaves the builder.
-- `scripts/export-company.ts` + `package.json` `"export:company"` — writes the
-  tree to `out/company-package/` and a `.zip`. Idempotent, like `npm run seed`.
-- `app/api/company-package/route.ts` — `GET` returns the package (JSON manifest
-  or `?format=zip` stream). Reads through `getDb()` repos only.
-- `README.md` generator — company overview + Mermaid org chart (mirrors
-  Paperclip's `company-export-readme.ts`).
+  No fs, no DB, no fetch, no env reads — unit-testable in `:memory:`.
+- `lib/yaml.ts` — dependency-free YAML frontmatter emitter (`toFrontmatterDoc`,
+  `toYamlDocument`) the builder serializes through.
+- `lib/zip.ts` — dependency-free ZIP (store method) writer, timestamps pinned
+  to the MS-DOS epoch instead of the real build time.
+- `lib/schemas.ts` — Zod schemas for the emitted frontmatter shapes
+  (`CompanyPackageDocSchema`, `TeamPackageDocSchema`, `AgentPackageDocSchema`,
+  `ProjectPackageDocSchema`, `TaskPackageDocSchema`, `SkillPackageDocSchema`,
+  `PaperclipSidecarSchema`). Every emitted doc is parsed against its schema
+  before it's serialized.
+- `scripts/export-company.ts` + `npm run export:company` — writes the tree to
+  `out/company-package/` and a sibling `.zip`. Idempotent, like `npm run seed`.
+- `app/api/company-package/route.ts` — `GET` returns the file manifest as
+  JSON; `?format=zip` streams a downloadable archive. Reads through `getDb()`
+  repos only; registered in the route smoke test.
+
+**Not yet shipped (P3):** the generated `README.md` + Mermaid org chart, and a
+verified round-trip import into a local Paperclip instance.
 
 ## 9. Test plan (TDD)
 
@@ -340,16 +348,19 @@ All additive, all through the repo layer.
 6. **Spec conformance** — `SKILL.md` files carry no Paperclip-required
    top-level field; `.paperclip.yaml` omits `secretId`/`secret_ref`.
 
-`npm test && npm run typecheck` must stay green before hand-off.
+`npm test && npm run typecheck` must stay green before hand-off. Implemented
+in `tests/company-package.test.ts` (coverage, org integrity, slug stability,
+spec conformance, secrets-never-leak), plus `tests/yaml.test.ts` and
+`tests/zip.test.ts` for the two serialization helpers.
 
 ## 10. Phasing
 
-- **P1** — builder + schemas + tests + `export:company` script (offline package,
-  no API). Ships the contract.
-- **P2** — `GET /api/company-package` route + ZIP stream + README/Mermaid.
-- **P3** — verified round-trip: import the emitted package into a local
-  Paperclip (`pnpm dev`, `paperclipai company import`) and record the result in
-  `docs/`.
+- **P1 — done.** Builder + schemas + tests + `export:company` script (offline
+  package, no API). Ships the contract.
+- **P2 — done.** `GET /api/company-package` route + ZIP stream.
+- **P3 — open.** README/Mermaid generator, and a verified round-trip: import
+  the emitted package into a local Paperclip (`pnpm dev`,
+  `paperclipai company import`), recorded in `docs/`.
 
 ## 11. Out of scope (v1)
 

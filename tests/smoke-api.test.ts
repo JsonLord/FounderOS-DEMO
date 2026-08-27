@@ -27,6 +27,7 @@ const ROUTES: RouteEntry[] = [
   { route: 'brain/graph', load: () => import('@/app/api/brain/graph/route'), url: 'http://localhost/api/brain/graph' },
   { route: 'brain/overview', load: () => import('@/app/api/brain/overview/route'), url: 'http://localhost/api/brain/overview' },
   { route: 'comms', load: () => import('@/app/api/comms/route'), url: 'http://localhost/api/comms' },
+  { route: 'company-package', load: () => import('@/app/api/company-package/route'), url: 'http://localhost/api/company-package' },
   { route: 'conductor/context', load: () => import('@/app/api/conductor/context/route'), url: 'http://localhost/api/conductor/context?path=/agents' },
   { route: 'connections', load: () => import('@/app/api/connections/route'), url: 'http://localhost/api/connections' },
   { route: 'contacts/tags', load: () => import('@/app/api/contacts/tags/route'), url: 'http://localhost/api/contacts/tags' },

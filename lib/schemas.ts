@@ -598,3 +598,124 @@ export type WorkflowStep = z.infer<typeof WorkflowStepSchema>;
 export type Workflow = z.infer<typeof WorkflowSchema>;
 export type SkillStatus = z.infer<typeof SkillStatusSchema>;
 export type Skill = z.infer<typeof SkillSchema>;
+
+// ── Paperclip company package (agentcompanies/v1) ───────────────────────────
+// Frontmatter shapes for the markdown package lib/company-package.ts emits.
+// These validate the exporter's OUTPUT the same way the schemas above
+// validate rows coming OUT of the DB — every doc is parsed before it's
+// serialized to disk. See spec.md and companies-spec.md (paperclip repo) for
+// the normative format.
+export const PackageSlugSchema = z
+  .string()
+  .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, 'package slugs must be url-safe kebab-case');
+
+export const PackageAuthorSchema = z.object({ name: z.string().min(1) });
+
+export const CompanyPackageDocSchema = z.object({
+  schema: z.literal('agentcompanies/v1'),
+  kind: z.literal('company'),
+  slug: PackageSlugSchema,
+  name: z.string().min(1),
+  description: z.string().min(1),
+  version: z.string().min(1).optional(),
+  license: z.string().min(1).optional(),
+  authors: z.array(PackageAuthorSchema).optional(),
+  goals: z.array(z.string().min(1)).optional(),
+  requirements: z.object({ secrets: z.array(z.string().min(1)) }).optional(),
+});
+
+export const TeamPackageDocSchema = z.object({
+  kind: z.literal('team'),
+  slug: PackageSlugSchema,
+  name: z.string().min(1),
+  description: z.string().min(1).optional(),
+  manager: z.string().min(1),
+  includes: z.array(z.string().min(1)).optional(),
+  tags: z.array(z.string().min(1)).optional(),
+});
+
+export const AgentPackageDocSchema = z.object({
+  kind: z.literal('agent'),
+  slug: PackageSlugSchema,
+  name: z.string().min(1),
+  title: z.string().min(1).optional(),
+  reportsTo: z.string().min(1).nullable(),
+  status: z.string().min(1).optional(),
+  skills: z.array(z.string().min(1)).optional(),
+  metadata: z.record(z.unknown()).optional(),
+});
+
+export const ProjectPackageDocSchema = z.object({
+  kind: z.literal('project'),
+  slug: PackageSlugSchema,
+  name: z.string().min(1),
+  description: z.string().min(1).optional(),
+  owner: z.string().min(1).optional(),
+});
+
+export const TaskPackageDocSchema = z.object({
+  kind: z.literal('task'),
+  slug: PackageSlugSchema,
+  name: z.string().min(1),
+  assignee: z.string().min(1),
+  project: z.string().min(1).optional(),
+  recurring: z.boolean().optional(),
+  metadata: z.record(z.unknown()).optional(),
+});
+
+// SKILL.md stays owned by the Agent Skills spec — no Paperclip-required
+// top-level fields. Paperclip-only data must live under metadata.paperclip.
+export const SkillPackageDocSchema = z.object({
+  name: z.string().min(1),
+  description: z.string().min(1),
+  metadata: z.record(z.unknown()).optional(),
+});
+
+// .paperclip.yaml vendor sidecar — adapter/runtime fidelity that must not
+// pollute the base markdown package. Deliberately has no `secretId` /
+// `type: secret_ref` shape: env inputs are portable name + requirement only.
+export const PaperclipAdapterSchema = z.object({
+  type: z.string().min(1),
+  config: z.record(z.unknown()).optional(),
+});
+
+export const PaperclipEnvInputSchema = z.object({
+  kind: z.enum(['plain', 'secret']),
+  requirement: z.enum(['required', 'optional']),
+  default: z.string().optional(),
+});
+
+export const PaperclipAgentExtensionSchema = z.object({
+  adapter: PaperclipAdapterSchema.optional(),
+  inputs: z.object({ env: z.record(PaperclipEnvInputSchema) }).optional(),
+});
+
+export const PaperclipRoutineTriggerSchema = z.object({
+  kind: z.literal('schedule'),
+  cronExpression: z.string().min(1),
+  timezone: z.string().min(1).optional(),
+});
+
+export const PaperclipRoutineSchema = z.object({
+  triggers: z.array(PaperclipRoutineTriggerSchema).min(1),
+});
+
+export const PaperclipSidecarSchema = z.object({
+  schema: z.literal('paperclip/v1'),
+  agents: z.record(PaperclipAgentExtensionSchema).optional(),
+  routines: z.record(PaperclipRoutineSchema).optional(),
+});
+
+export type PackageAuthor = z.infer<typeof PackageAuthorSchema>;
+export type CompanyPackageDoc = z.infer<typeof CompanyPackageDocSchema>;
+export type TeamPackageDoc = z.infer<typeof TeamPackageDocSchema>;
+export type AgentPackageDoc = z.infer<typeof AgentPackageDocSchema>;
+export type ProjectPackageDoc = z.infer<typeof ProjectPackageDocSchema>;
+export type TaskPackageDoc = z.infer<typeof TaskPackageDocSchema>;
+export type SkillPackageDoc = z.infer<typeof SkillPackageDocSchema>;
+export type PaperclipAdapter = z.infer<typeof PaperclipAdapterSchema>;
+export type PaperclipEnvInput = z.infer<typeof PaperclipEnvInputSchema>;
+export type PaperclipAgentExtension = z.infer<typeof PaperclipAgentExtensionSchema>;
+export type PaperclipRoutineTrigger = z.infer<typeof PaperclipRoutineTriggerSchema>;
+export type PaperclipRoutine = z.infer<typeof PaperclipRoutineSchema>;
+export type PaperclipSidecar = z.infer<typeof PaperclipSidecarSchema>;
