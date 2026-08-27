@@ -14,11 +14,11 @@ function safeNext(next: string | undefined): string {
   return next && next.startsWith('/') && !next.startsWith('//') ? next : '/';
 }
 
-function setSession(response: NextResponse, token: string): NextResponse {
+function setSession(response: NextResponse, token: string, isProduction: boolean): NextResponse {
   response.cookies.set(SESSION_COOKIE, token, {
     httpOnly: true, // page scripts can never read it
     sameSite: 'lax', // another origin cannot ride it
-    secure: process.env.NODE_ENV === 'production', // plain-http localhost still works
+    secure: isProduction && process.env.DISABLE_SECURE_COOKIE !== 'true', // allow HF spaces proxy over plain HTTP if needed
     path: '/',
     maxAge: 60 * 60 * 24 * 30,
   });
@@ -67,12 +67,18 @@ export async function POST(request: Request) {
     return NextResponse.redirect(back, 303);
   }
 
+  // Determine base URL safely respecting x-forwarded-host / x-forwarded-proto
+  const host = request.headers.get('x-forwarded-host') || request.headers.get('host');
+  const proto = request.headers.get('x-forwarded-proto') || 'https';
+  const targetUrl = host ? `${proto}://${host}${safeNext(next)}` : new URL(safeNext(next), request.url).toString();
+
   // 303 so the browser follows with GET rather than re-posting the token.
   return setSession(
     isForm
-      ? NextResponse.redirect(new URL(safeNext(next), request.url), 303)
+      ? NextResponse.redirect(targetUrl, 303)
       : NextResponse.json({ ok: true }),
     configured,
+    process.env.NODE_ENV === 'production',
   );
 }
 
