@@ -52,8 +52,25 @@ repos. It never queries SQLite directly and never invents "connected" state.
 
 ## 2. Target package layout
 
-The exporter writes a self-contained package tree (default output
-`out/company-package/`, also streamable as a ZIP from the API route):
+The exporter writes a self-contained package tree to **`company-package/` at
+the repo root — committed, not `.gitignored`.** This is deliberate, not an
+oversight: `sources[]`/`includes` in the spec resolve `repo + ref + path`, and
+Paperclip's own CLI resolves a GitHub source the same way (`paperclipai
+company import owner/repo/path --ref <branch>`, or a `github.com/...` URL
+with a `?path=` query param — see `cli/src/commands/client/company.ts` in the
+Paperclip repo). None of that works unless `COMPANY.md` actually lives in the
+git tree; a build artifact that only exists locally or behind the live API
+route is invisible to a GitHub-native import. `tests/company-package-sync.test.ts`
+is the tripwire — `npm test` fails if `company-package/` drifts from what
+`buildCompanyPackage` generates from the current seed, so `npm run
+export:company` has to be re-run and the diff committed whenever
+agents/skills/SOPs/departments change (the same discipline `npm run seed`
+would need if `data/founder-os.db` were committed — it isn't, but this is,
+because portability is the whole point here). The live `GET
+/api/company-package` route (JSON manifest, or `?format=zip` for a
+downloadable archive) still builds on demand from the DB and is unaffected —
+it's for pulling the package out of a *running* FounderOS instance, which is
+a different use case from GitHub-native import.
 
 ```text
 founder-os/
@@ -276,8 +293,11 @@ built from `lib/connectors/*` and `lib/creds.ts` — by **name only**. Rules:
 
 ### 7.1 Markdown package import (primary)
 
-1. `paperclipai company import ./out/company-package` (or `POST
-   /api/companies/import/preview` then `POST /api/companies/import`).
+1. From a local clone: `paperclipai company import ./company-package`.
+   Directly from GitHub, no clone needed:
+   `paperclipai company import JsonLord/FounderOS-DEMO/company-package --ref main`
+   (or the equivalent `POST /api/companies/import/preview` then `POST
+   /api/companies/import`, pointing at the same repo + ref + path).
 2. Paperclip builds the import graph from `COMPANY.md` → teams → agents →
    projects → tasks → skills, renders the tree with entity-level checkboxes,
    and applies collision strategy.
@@ -323,10 +343,13 @@ All additive, all through the repo layer. **Shipped:**
   `PaperclipSidecarSchema`). Every emitted doc is parsed against its schema
   before it's serialized.
 - `scripts/export-company.ts` + `npm run export:company` — writes the tree to
-  `out/company-package/` and a sibling `.zip`. Idempotent, like `npm run seed`.
+  `company-package/` at the repo root. Not idempotent-and-forgettable like
+  `npm run seed`: the output is committed, so re-run it and `git add
+  company-package && git commit` whenever the seeded org changes.
 - `app/api/company-package/route.ts` — `GET` returns the file manifest as
-  JSON; `?format=zip` streams a downloadable archive. Reads through `getDb()`
-  repos only; registered in the route smoke test.
+  JSON; `?format=zip` streams a downloadable archive, built on demand from
+  the DB (not from the committed directory). Reads through `getDb()` repos
+  only; registered in the route smoke test.
 
 **Not yet shipped (P3):** the generated `README.md` + Mermaid org chart, and a
 verified round-trip import into a local Paperclip instance.
@@ -347,6 +370,12 @@ verified round-trip import into a local Paperclip instance.
    anywhere in the emitted bytes; only names appear.
 6. **Spec conformance** — `SKILL.md` files carry no Paperclip-required
    top-level field; `.paperclip.yaml` omits `secretId`/`secret_ref`.
+7. **Committed-copy sync** (`tests/company-package-sync.test.ts`) — every file
+   `buildCompanyPackage` generates exists under `company-package/` with
+   byte-identical content, and `company-package/` has no orphaned files the
+   builder no longer generates. This is what makes GitHub-native import
+   trustworthy: without it, the committed directory could silently drift
+   from the seeded org and nobody would notice until an import failed.
 
 `npm test && npm run typecheck` must stay green before hand-off. Implemented
 in `tests/company-package.test.ts` (coverage, org integrity, slug stability,
