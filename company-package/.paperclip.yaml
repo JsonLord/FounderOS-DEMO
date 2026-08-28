@@ -1,0 +1,209 @@
+schema: "paperclip/v1"
+agents:
+  client-roster:
+    adapter:
+      type: "claude_local"
+    inputs:
+      env:
+        ATTIO_API_KEY:
+          kind: "secret"
+          requirement: "required"
+  comms-agent:
+    adapter:
+      type: "claude_local"
+  conductor:
+    adapter:
+      type: "claude_local"
+  data-agent:
+    adapter:
+      type: "claude_local"
+  payments-pulse:
+    adapter:
+      type: "claude_local"
+    inputs:
+      env:
+        STRIPE_SECRET_KEY:
+          kind: "secret"
+          requirement: "optional"
+  sales-agent:
+    adapter:
+      type: "claude_local"
+    inputs:
+      env:
+        ATTIO_API_KEY:
+          kind: "secret"
+          requirement: "required"
+        STRIPE_SECRET_KEY:
+          kind: "secret"
+          requirement: "required"
+  social-agent:
+    adapter:
+      type: "claude_local"
+    inputs:
+      env:
+        ZERNIO_API_KEY:
+          kind: "secret"
+          requirement: "required"
+        ARCADS_API_KEY:
+          kind: "secret"
+          requirement: "required"
+        MANYCHAT_API_KEY:
+          kind: "secret"
+          requirement: "required"
+  stack-monitor:
+    adapter:
+      type: "claude_local"
+  notion-sync:
+    adapter:
+      type: "claude_local"
+    inputs:
+      env:
+        NOTION_API_KEY:
+          kind: "secret"
+          requirement: "optional"
+  arcads-creative:
+    adapter:
+      type: "claude_local"
+    inputs:
+      env:
+        ARCADS_API_KEY:
+          kind: "secret"
+          requirement: "required"
+  crm-pulse:
+    adapter:
+      type: "claude_local"
+    inputs:
+      env:
+        ATTIO_API_KEY:
+          kind: "secret"
+          requirement: "required"
+  client-success:
+    adapter:
+      type: "claude_local"
+    inputs:
+      env:
+        SLACK_BOT_TOKEN:
+          kind: "secret"
+          requirement: "optional"
+  fanbasis-sales:
+    adapter:
+      type: "claude_local"
+  gmail-worker:
+    adapter:
+      type: "claude_local"
+    inputs:
+      env:
+        INBOX_1_HOST:
+          kind: "secret"
+          requirement: "optional"
+        INBOX_1_USER:
+          kind: "secret"
+          requirement: "optional"
+        INBOX_1_PASS:
+          kind: "secret"
+          requirement: "optional"
+  higgsfield-creative:
+    adapter:
+      type: "claude_local"
+  launchpad-cohort-sales:
+    adapter:
+      type: "claude_local"
+    inputs:
+      env:
+        ATTIO_API_KEY:
+          kind: "secret"
+          requirement: "optional"
+        STRIPE_SECRET_KEY:
+          kind: "secret"
+          requirement: "optional"
+  manychat-mcp:
+    adapter:
+      type: "claude_local"
+    inputs:
+      env:
+        MANYCHAT_API_KEY:
+          kind: "secret"
+          requirement: "optional"
+  markdown-auditor:
+    adapter:
+      type: "claude_local"
+  client-onboarding:
+    adapter:
+      type: "claude_local"
+    inputs:
+      env:
+        ATTIO_API_KEY:
+          kind: "secret"
+          requirement: "optional"
+        SLACK_BOT_TOKEN:
+          kind: "secret"
+          requirement: "optional"
+        NOTION_API_KEY:
+          kind: "secret"
+          requirement: "optional"
+  pava-financing:
+    adapter:
+      type: "claude_local"
+  processor-confirmation:
+    adapter:
+      type: "claude_local"
+    inputs:
+      env:
+        STRIPE_SECRET_KEY:
+          kind: "secret"
+          requirement: "optional"
+  remotion-editor:
+    adapter:
+      type: "claude_local"
+  sales-calls-data:
+    adapter:
+      type: "claude_local"
+    inputs:
+      env:
+        ATTIO_API_KEY:
+          kind: "secret"
+          requirement: "optional"
+  slack-worker:
+    adapter:
+      type: "claude_local"
+    inputs:
+      env:
+        SLACK_BOT_TOKEN:
+          kind: "secret"
+          requirement: "optional"
+  stripe-sales:
+    adapter:
+      type: "claude_local"
+    inputs:
+      env:
+        STRIPE_SECRET_KEY:
+          kind: "secret"
+          requirement: "optional"
+  vantage-sales:
+    adapter:
+      type: "claude_local"
+    inputs:
+      env:
+        ATTIO_API_KEY:
+          kind: "secret"
+          requirement: "optional"
+        STRIPE_SECRET_KEY:
+          kind: "secret"
+          requirement: "optional"
+  vantage-fanbasis:
+    adapter:
+      type: "claude_local"
+  vector-auditor:
+    adapter:
+      type: "claude_local"
+  whatsapp-worker:
+    adapter:
+      type: "claude_local"
+  zernio-publisher:
+    adapter:
+      type: "claude_local"
+    inputs:
+      env:
+        ZERNIO_API_KEY:
+          kind: "secret"
+          requirement: "required"
