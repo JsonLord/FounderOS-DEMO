@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "seed": "tsx scripts/seed.ts",
-    "brain:docs": "tsx scripts/generate-brain-docs.ts"
+    "brain:docs": "tsx scripts/generate-brain-docs.ts",
+    "export:company": "tsx scripts/export-company.ts"
   },
   "dependencies": {
     "@notionhq/client": "^5.22.0",
