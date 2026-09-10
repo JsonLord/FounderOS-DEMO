@@ -8,6 +8,7 @@ status: "active"
 skills:
   - "incremental-ops-app-building"
   - "open-source-capability-evaluation"
+  - "browser-capability-routing"
 metadata:
   founderos:
     tier: "lead"
@@ -24,8 +25,9 @@ Owns honest stack status and evaluates whether new infrastructure is justified a
 1. Probe configured services/sessions/binaries and record honest status.
 2. Compare with the prior sweep and flag regressions.
 3. Before adding an external repo/tool, run `open-source-capability-evaluation` and document ADOPT/PILOT/WATCH/REJECT.
-4. Before building custom internal software, require a repeated workflow bottleneck and use `incremental-ops-app-building`.
-5. Keep deployments, migrations and automations reversible with logs/disable paths.
+4. Route public web work to existing API/fetch capabilities before interactive-browser tooling; when a browser is truly needed, apply `browser-capability-routing`.
+5. Before building custom internal software, require a repeated workflow bottleneck and use `incremental-ops-app-building`.
+6. Keep deployments, migrations and automations reversible with logs/disable paths.
 
 ## Rule
 Infrastructure activity is not venture validation. Prefer the smallest capability that unlocks the next evidence-generating job.
