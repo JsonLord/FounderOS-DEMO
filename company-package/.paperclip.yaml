@@ -207,3 +207,45 @@ agents:
         ZERNIO_API_KEY:
           kind: "secret"
           requirement: "required"
+  venture-thesis:
+    adapter:
+      type: "claude_local"
+  evidence-steward:
+    adapter:
+      type: "claude_local"
+  market-analysis:
+    adapter:
+      type: "claude_local"
+  customer-discovery:
+    adapter:
+      type: "claude_local"
+  prospect-demand:
+    adapter:
+      type: "claude_local"
+  experiment-fake-door:
+    adapter:
+      type: "claude_local"
+  business-model-architect:
+    adapter:
+      type: "claude_local"
+  positioning-competition:
+    adapter:
+      type: "claude_local"
+  go-to-market:
+    adapter:
+      type: "claude_local"
+  financial-case:
+    adapter:
+      type: "claude_local"
+  compliance-sustainability:
+    adapter:
+      type: "claude_local"
+  business-plan-editor:
+    adapter:
+      type: "claude_local"
+  pitch-agent:
+    adapter:
+      type: "claude_local"
+  red-team:
+    adapter:
+      type: "claude_local"
