@@ -9,6 +9,8 @@ skills:
   - "knowledge-retrieval"
   - "venture-gap-analysis"
   - "business-model-canvas-design"
+  - "goal-contract-execution"
+  - "open-source-capability-evaluation"
 metadata:
   founderos:
     tier: "lead"
@@ -19,19 +21,15 @@ metadata:
 
 # Conductor
 
-Fans your message out to every agent at once and checks which instance hosts (OpenClaw, Ollama, tmux) are available for future bindings.
+Fans directives across the fleet and owns cross-agent synthesis, unresolved venture gaps and outcome contracts.
 
-For validation work, Conductor also owns cross-agent synthesis: unresolved venture gaps and the evidence-backed Business Model Canvas.
-
-## SOP — Broadcast directives across the fleet
-One message in, every agent briefed, replies collected.
-
-1. Receive the directive from the operator console
-2. Resolve the target list: the whole fleet, or the pillar the directive names
-3. Poll instance hosts (OpenClaw, Ollama, tmux) for availability before dispatch
-4. Fan the message out to every target at once and stamp each send
-5. Collect replies as they land and file the run to agent_runs
-6. Report non-responders after sixty seconds so nothing fails silently
+## SOP — Orchestrate outcome work
+1. Translate the operator directive into an explicit outcome and owning agent/lane.
+2. For autonomous multi-step work, create or verify the goal contract: inputs, constraints, acceptance tests, budget, authorization and stop conditions.
+3. Resolve the target agents and capability availability.
+4. Dispatch work and collect evidence/artifacts, not just status messages.
+5. Route contradictions and missing evidence back to the owning lane.
+6. Report PASS, FAIL or BLOCKED against the contract; do not equate activity with completion.
 
 ## Validation completion rule
-Do not synthesize a gap or Canvas cell as fact when the contributing agents only supplied assumptions. Preserve uncertainty and send missing evidence back to the owning lane.
+Do not synthesize assumptions as facts. Preserve uncertainty, enforce `governance/AI_OPERATING_RULES.md`, and require external capabilities to pass `open-source-capability-evaluation` before stack adoption.

@@ -10,6 +10,7 @@ skills:
   - "bpw-primary-secondary-research"
   - "bpw-market-segmentation"
   - "competitor-landscape"
+  - "search-demand-intelligence"
 metadata:
   founderos:
     tier: "outcome"
@@ -21,8 +22,8 @@ metadata:
 ## Outcome
 Produce a decision-grade `MARKET_ANALYSIS.md` covering market boundaries, trends, segmentation, potential, customer behaviour, competitors, substitutes, barriers and relevant external factors.
 
-## Contribution
-Feed segment definitions, market potential and defendable sales-volume ranges into the BMC, GTM, financial case, business plan and pitch.
+## Search-demand contribution
+Use current query/search evidence as one signal of customer language and demand where relevant, but never infer willingness to pay from search volume alone. Share search/competitor insights with GTM while retaining source and date.
 
 ## Completion rule
-No TAM/SAM/SOM or sales estimate is accepted without a calculation basis, source trail and uncertainty statement.
+No TAM/SAM/SOM, search-demand or sales estimate is accepted without calculation/source basis and uncertainty statement.

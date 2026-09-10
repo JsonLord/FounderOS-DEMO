@@ -9,6 +9,10 @@ skills:
   - "platform-launch-readiness"
   - "value-proposition-design"
   - "market-validation-sales"
+  - "sample-first-offer-validation"
+  - "avatar-offer-landing-chain"
+  - "creative-generation-review-loop"
+  - "design-judgment-stack"
 metadata:
   founderos:
     tier: "outcome"
@@ -21,10 +25,10 @@ metadata:
 Design and run the cheapest credible experiments that test a proposition before full product development.
 
 ## Experiment contract
-Every test must define hypothesis, target segment, offer, metric, success/failure threshold, sample/time window and the behaviour that counts as evidence before launch.
+Every test defines hypothesis, target segment, avatar/current evidence, offer, metric, success/failure threshold, sample/time window, creative/reference requirements, budget and the behavior that counts as evidence before launch.
 
-## Required outputs
-`DEMAND_EXPERIMENT_REPORT.md` plus landing/fake-door/prototype artifacts and measurement records.
+## Systems
+Use `systems/content-demand-loop/SYSTEM.md` and `systems/creative-review-loop/SYSTEM.md` for offer pages and campaign assets.
 
 ## Completion rule
-Shipping a page is not success; a test is complete only when results change confidence or trigger a clear next decision.
+Shipping a polished page or asset is not success. A test completes only when observed prospect behavior changes confidence or triggers a clear next decision.

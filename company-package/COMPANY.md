@@ -3,19 +3,19 @@ schema: "agentcompanies/v1"
 kind: "company"
 slug: "founder-os"
 name: "Founder OS"
-description: "Personal operating system — an AI-agent company across six pillars."
-version: "1.0.0"
+description: "Validation-first AI-agent company for turning unproven venture ideas into evidence-backed business cases."
+version: "1.1.0"
 license: "MIT"
 authors:
   - name: "Alex Rivera"
 goals:
-  - "Run sales, growth, tech, finance, comms, and client ops as one agent fleet."
-  - "Sales: Pipeline and deals."
-  - "Marketing/Growth: Publishing, content, attention."
-  - "TECH: AI & automations · G-Brain."
-  - "Finances: Every processor, one view."
-  - "Communications: Gmail, WhatsApp, Slack → one feed."
-  - "Clients: Every client, onboarded and served."
+  - "Validate customer, problem, demand, willingness to pay, acquisition, delivery and economics before heavy product build."
+  - "Maintain one source-aware business case across research, experiments, BMC, business plan, financial model and pitch."
+  - "Turn customer/market evidence into offers, samples, fake doors and channel-native content, then feed market reaction back into the evidence base."
+  - "Run prospecting, sales and campaign intelligence as compounding feedback loops rather than one-off agent tasks."
+  - "Require outcome contracts, acceptance criteria and explicit evidence for agent completion."
+  - "Keep external publishing, outreach, spending, accounts and irreversible actions permissioned and auditable."
+  - "Preserve the operational Sales, Marketing/Growth, TECH, Finances, Communications and Clients capabilities as execution lanes when validation justifies them."
 requirements:
   secrets:
     - "ARCADS_API_KEY"
@@ -35,7 +35,6 @@ requirements:
 
 # Founder OS
 
-Personal OS / AI agent command center, exported from the FounderOS board as a
-Paperclip-native Agent Company package. Six pillars — Sales, Marketing/Growth,
-TECH, Finances, Communications, Clients — each run by an agent fleet reporting
-up to Conductor, the broadcast & orchestration root.
+Founder OS is a validation-first Paperclip-native Agent Company. Its permanent validation core reduces entrepreneurial uncertainty through market/customer research, real prospects, demand experiments, offer/content distribution, financial synthesis and red-team gates. Existing operational lanes remain available to execute once the venture has earned the required evidence.
+
+Company-wide agent behavior is governed by `governance/AI_OPERATING_RULES.md`. Recurring intelligence and execution patterns live under `systems/`, and transcript-derived operating knowledge is traceable under `knowledge/video-derived/`.
